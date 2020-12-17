@@ -67,11 +67,12 @@ class algorithm:
         #The resistances will change depending on the outcome of the resistance varaible.
     horde_resistance = {magic_res : 0, melee_res : 0 , ice_res : 0 , fire_res : 0, electric_res : 0, spirit_res : 0, energy_res : 0}
 
-    def __init__(self, type1, level, power, resistance):
+    def __init__(self, type1, level, power, resistance, players):
         self.type1 = type1
         self.level = level
         self.power = power
         self.resistance = resistance
+        self.players = players
 
     def resistance(self):
         #This function contains the code that will be randomly assigned to the hordes when the players have to fight them.
@@ -101,6 +102,14 @@ class algorithm:
         elif self.type1 == "energy_dmg":
             energy_dmg = 10 * self.level
             horde_resistance[energy_res] = energy_dmg
+
+    def horde_health(self):
+        if self.level < 10:
+            hh = 100 * self.players
+        elif self.level > 10 and self.level < 20:
+            hh = 200 * self.players
+        elif self.level == 30:
+            hh = 300 * self.players
 
     def enemy_move(self):
         attack_who = random.ranint(1, self.amount_of_players)
