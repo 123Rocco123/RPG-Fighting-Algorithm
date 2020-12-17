@@ -1,6 +1,45 @@
 import random
 import time
 
+instructions = "Below you have 5 catagories which are used to give your character different attributes so that you'll be able to have a greater chance of success when an action that you want to do relies on that speciifc ability."
+    
+#The following dictionary contains the attributes that the player can have.
+skills = {"Strength" : 0, "Magic" : 0, "Stamina" : 0, "Speed" : 0, "Intelligence" : 0}
+points = 50
+
+#The following 2 definitions work in tandom with one another, and are used to create a character.
+def character_creation():
+    print("Hello, and welcome to *INSERT GAME NAME HERE*!")
+    print(instructions)
+    #The points variable here is to show the player how many points they have left to spend on the categories.
+
+    print("You have ", str(points), "to spend on the categories listed.")
+    print("Add points of the following categories:")
+
+    loop()
+
+#The following for loop is used to append the skills points that the player wants for each category to the specific category.
+def loop():
+    global points, skills
+
+    #The loop here is used to create a iterate through the keys inside of the dictionary so as to assign the points that the user wants to give them.
+    for x in skills.keys():
+        print("You have", points, "left.\n" +  str(x) + ":")
+        skills[x] = int(input())
+        #Each attribute is capped off at 20
+        if skills[x] < points and skills[x] <= 20:
+            points -= skills[x]
+        else:
+            skills[x] = 0
+            print("You don't have that many points")
+            for x in skills.keys():
+                skills[x] = 0
+            points = 50
+            loop()
+
+    for x in skills:
+        print(x)
+
 #attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"]}
 end = False
 numbers = 0
