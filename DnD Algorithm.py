@@ -63,6 +63,10 @@ print(players)
 
 
 class algorithm:
+    #The dictionary below contains the resistance of the horde that the player / players will have to face.
+        #The resistances will change depending on the outcome of the resistance varaible.
+    horde_resistance = {magic_res : 0, melee_res : 0 , ice_res : 0 , fire_res : 0, electric_res : 0, spirit_res : 0, energy_res : 0}
+
     def __init__(self, type1, level, power, resistance):
         self.type1 = type1
         self.level = level
@@ -71,22 +75,32 @@ class algorithm:
 
     def resistance(self):
         #This function contains the code that will be randomly assigned to the hordes when the players have to fight them.
-            #The hordes will be randomly resistant to 1 of the 7 magic types, giving emphesis on the players to have a diverse cast of characters. 
-        resist = random.randint(1,7)
-        if resist == 1:
-            magic_dmg -= 10 * self.level
-        elif resist == 2:
-            melee_dmg -= 10 * self.level
-        elif resist == 3:
-            ice_dmg -= 10 * self.level
-        elif resist == 4:
-            fire_dmg -= 10 * self.level
-        elif resist == 5:
-            electric_dmg -= 10 * self.level
-        elif resist == 6:
-            spirit_dmg -= 10 * self.level
-        elif resist == 7:
-            energy_dmg -= 10 * self.level
+        rand_horde_num = random.randint(1,10)
+        resist = 1
+
+        if self.type1 == "magic":
+            #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
+                #The resistance will increase with the level of the player so that they won't be able to instantly defeat the horde.
+            magic_dmg = resist * self.level
+            horde_resistance[magic_res] = magic_dmg
+        elif self.type1 == "melee":
+            melee_dmg = 10 * self.level
+            horde_resistance[melee_res] = melee_dmg
+        elif self.type1 == "ice":
+            ice_dmg = 10 * self.level
+            horde_resistance[ice_res] = ice_dmg
+        elif self.type1 == "fire":
+            fire_dmg = 10 * self.level
+            horde_resistance[fire_res] = fire_dmg
+        elif self.type1 == "electric":
+            electric_dmg = 10 * self.level
+            horde_resistance[electric_res] = electric_dmg
+        elif self.type1 == "spirit":
+            spirit_dmg = 10 * self.level
+            horde_resistance[spirit_res] = spirit_dmg
+        elif self.type1 == "energy_dmg":
+            energy_dmg = 10 * self.level
+            horde_resistance[energy_res] = energy_dmg
 
     def enemy_move(self):
         attack_who = random.ranint(1, self.amount_of_players)
