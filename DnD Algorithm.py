@@ -40,6 +40,19 @@ def loop():
     for x in skills:
         print(x)
 
+    #Calling this function will result in the player being assinged his role as either a hybrid, melee, or magic dealer. 
+    player_type()
+
+def player_type():
+    global character_type
+
+    if skills["Strength"] > skils["Magic"]:
+        character_type = "melee"
+    elif skills["Strength"] < skills["Magic"]:
+        character_type = "wizard"
+    elif skills["Strength"] = skills["Magic"]:
+        character_type = "hybrid"
+
 #attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"]}
 end = False
 numbers = 0
@@ -67,51 +80,51 @@ players = {}
 player_count = 0
 
 #The while loop here is used to record the player's character architypes. 
-while how_many > 0:
-    player_count += 1
+#while how_many > 0:
+    #player_count += 1
     #The list here is used to contain the attributes for a single character
-    player_attrib = []
+    #player_attrib = []
     
-    attrib1 = input("Choose your character's damage type: ")
-    attrib2 = input("What is your current level? ")
+    #attrib1 = input("Choose your character's damage type: ")
+    #attrib2 = input("What is your current level? ")
 
-    player_attrib.append(attrib1)
-    player_attrib.append(attrib2)
+    #player_attrib.append(attrib1)
+    #player_attrib.append(attrib2)
     #This will then append the character's information to the dictionary for the specific player.
-    players[player_count] = player_attrib
+    #players[player_count] = player_attrib
 
-    how_many -= 1
+    #how_many -= 1
 
 print(players)
 
-#enemy_ac = " "
-#level = 1
-#bonus_dmg = level + random.randint(1,20)
+#This function is used to outline when a fight is to occur.
+def fighting():
+    global character_type
 
-#PLACEHOLDER = 4
+    battle = False
 
-#battle = False
-
-#enemy_grunt = 500
-#enemy_health_boss = 1000
-#big_bad = 5000
-
-#danger = 1
-
-#grunt_dmg = level * danger
-
+    while end = False:
+        time.sleep(300)
+        #To add randomness to the game, depending on what value "rand" is equal to, then the algorithm will be initialized, and a battle sequence will occur.
+        rand = random.randint(1,5)
+        if rand >= 4:
+            battle = True
+            begin = algorithm(character_type, 1, skills["stamina"], skills["speed"], skills["intelligence"])
+            begin.algorithm()
+        else:
+            fighting()
 
 class algorithm:
     #The dictionary below contains the resistance of the horde that the player / players will have to face.
         #The resistances will change depending on the outcome of the resistance varaible.
-    horde_resistance = {magic_res : 0, melee_res : 0 , ice_res : 0 , fire_res : 0, electric_res : 0, spirit_res : 0, energy_res : 0}
+    horde_resistance = {magic_res : 0, melee_res : 0 , hybrid_res : 0}
 
-    def __init__(self, type1, level, power, resistance, players):
+    def __init__(self, type1, level, stamina, speed, intelligence):
         self.type1 = type1
         self.level = level
-        self.power = power
-        self.resistance = resistance
-        self.players = players
+        self.stamina = stamina
+        self.speed = speed
+        self.intelligence = intelligence
 
     def resistance(self):
         #This function contains the code that will be randomly assigned to the hordes when the players have to fight them.
@@ -126,32 +139,20 @@ class algorithm:
         elif self.type1 == "melee":
             melee_dmg = 10 * self.level
             horde_resistance[melee_res] = melee_dmg
-        elif self.type1 == "ice":
-            ice_dmg = 10 * self.level
-            horde_resistance[ice_res] = ice_dmg
-        elif self.type1 == "fire":
-            fire_dmg = 10 * self.level
-            horde_resistance[fire_res] = fire_dmg
-        elif self.type1 == "electric":
-            electric_dmg = 10 * self.level
-            horde_resistance[electric_res] = electric_dmg
-        elif self.type1 == "spirit":
-            spirit_dmg = 10 * self.level
-            horde_resistance[spirit_res] = spirit_dmg
-        elif self.type1 == "energy_dmg":
-            energy_dmg = 10 * self.level
-            horde_resistance[energy_res] = energy_dmg
+        elif self.type1 == "hybrid":
+            hybrid_dmg = 10 * self.level
+            horde_resistance[hybrid_res] = hybrid_dmg
 
     def horde_health(self):
         if self.level < 10:
-            hh = 100 * self.players
+            hh = 100 * self.level
         elif self.level > 10 and self.level < 20:
-            hh = 200 * self.players
+            hh = 200 * self.level
         elif self.level == 30:
-            hh = 300 * self.players
+            hh = 300 * self.level
 
-    def enemy_move(self):
-        attack_who = random.ranint(1, self.amount_of_players)
+    #def enemy_move(self):
+        #attack_who = random.ranint(1, self.amount_of_players)
 
 
 
