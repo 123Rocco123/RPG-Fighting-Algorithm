@@ -50,7 +50,7 @@ def player_type():
         character_type = "melee"
     elif skills["Strength"] < skills["Magic"]:
         character_type = "wizard"
-    elif skills["Strength"] = skills["Magic"]:
+    elif skills["Strength"] == skills["Magic"]:
         character_type = "hybrid"
 
 #attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"]}
@@ -103,7 +103,7 @@ def fighting():
 
     battle = False
 
-    while end = False:
+    while end == False:
         time.sleep(300)
         #To add randomness to the game, depending on what value "rand" is equal to, then the algorithm will be initialized, and a battle sequence will occur.
         rand = random.randint(1,5)
@@ -118,6 +118,9 @@ class algorithm:
     #The dictionary below contains the resistance of the horde that the player / players will have to face.
         #The resistances will change depending on the outcome of the resistance varaible.
     horde_resistance = {magic_res : 0, melee_res : 0 , hybrid_res : 0}
+    health = 500 + (100*level)
+
+    player_turn = 1
 
     def __init__(self, type1, level, stamina, speed, intelligence):
         self.type1 = type1
@@ -143,18 +146,30 @@ class algorithm:
             hybrid_dmg = 10 * self.level
             horde_resistance[hybrid_res] = hybrid_dmg
 
+    #The function here is used to determine if the health of the enemy horde.
+        #The health will either increase or decrease depending on the level of the players.
     def horde_health(self):
         if self.level < 10:
             hh = 100 * self.level
+            init_hh = hh
         elif self.level > 10 and self.level < 20:
             hh = 200 * self.level
+            init_hh = hh
         elif self.level == 30:
             hh = 300 * self.level
+            init_hh = hh
 
-    #def enemy_move(self):
-        #attack_who = random.ranint(1, self.amount_of_players)
+    #This function is used to determine how much health the player will lose depenig on the health of the enemy horde. 
+        #When the horde will have 25% of their health, then they will enter a "bonus damage" of sorts, where they'll deal an extra 25% damage to the player.
+    def enemy_move(self):
+        attack = (self.level**2) * 5
 
-
+        if hh > 0:
+            player_health -= attack
+        elif hh == (0.25 * init_hh):
+            palyer_health -= attack + (attack * 0.25)
+        elif hh < 0:
+            print("You defeated the horde")
 
     def algorithm(self):
         time.sleep(600)
