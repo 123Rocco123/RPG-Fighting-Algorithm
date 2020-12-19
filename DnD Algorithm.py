@@ -1,6 +1,10 @@
 import random
 import time
 
+#The dictionary below is used to determine the words that the player would use to see if they want to attack of hit something. 
+attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"]}
+end = False
+
 instructions = "Below you have 5 catagories which are used to give your character different attributes so that you'll be able to have a greater chance of success when an action that you want to do relies on that speciifc ability."
     
 #The following dictionary contains the attributes that the player can have.
@@ -53,50 +57,6 @@ def player_type():
     elif skills["Strength"] == skills["Magic"]:
         character_type = "hybrid"
 
-#attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"]}
-end = False
-numbers = 0
-
-#The types of classes that the player can choose to be, 7 player maximum.
-magic_types = [
-  "magic",
-  "melee",
-  "ice",
-  "fire",
-  "electric",
-  "spirit",
-  "energy"
-]
-
-for x in magic_types:
-    numbers += 1
-    print(numbers, x)
-
-#This variable will keep track of how many plaers are in the game, and therefore, will be used to determine the characters in the game.
-how_many = int(input("How many players are there? "))
-
-#The dictionary below is used to keep track of each players damage type, and their level.
-players = {}
-player_count = 0
-
-#The while loop here is used to record the player's character architypes. 
-#while how_many > 0:
-    #player_count += 1
-    #The list here is used to contain the attributes for a single character
-    #player_attrib = []
-    
-    #attrib1 = input("Choose your character's damage type: ")
-    #attrib2 = input("What is your current level? ")
-
-    #player_attrib.append(attrib1)
-    #player_attrib.append(attrib2)
-    #This will then append the character's information to the dictionary for the specific player.
-    #players[player_count] = player_attrib
-
-    #how_many -= 1
-
-print(players)
-
 #This function is used to outline when a fight is to occur.
 def fighting():
     global character_type
@@ -117,7 +77,7 @@ def fighting():
 class algorithm:
     #The dictionary below contains the resistance of the horde that the player / players will have to face.
         #The resistances will change depending on the outcome of the resistance varaible.
-    horde_resistance = {magic_res : 0, melee_res : 0 , hybrid_res : 0}
+    horde_resistance = {magic_res : 0, melee_res : 0}
     health = 500 + (100*level)
 
     player_turn = 1
@@ -134,17 +94,27 @@ class algorithm:
         rand_horde_num = random.randint(1,10)
         resist = 1
 
-        if self.type1 == "magic":
-            #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
+        #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
                 #The resistance will increase with the level of the player so that they won't be able to instantly defeat the horde.
+        if self.type1 == "magic":
             magic_dmg = resist * self.level
             horde_resistance[magic_res] = magic_dmg
         elif self.type1 == "melee":
             melee_dmg = 10 * self.level
             horde_resistance[melee_res] = melee_dmg
         elif self.type1 == "hybrid":
-            hybrid_dmg = 10 * self.level
-            horde_resistance[hybrid_res] = hybrid_dmg
+            melee_dmg = resist * self.level
+            magic_dmg = resist * self.level
+            
+            horde_resistance[melee_res] = melee_dmg
+            horde_resistance[magic_res] = magic_dmg
+
+    #This function is used to determine the damage that the player will inflict on the enemy hordes. 
+    def player_dmg(self):
+        if player_action == attack_dic[melee_attacks]: 
+            p1_dmg = skills["Strength"] + (0.25 * skills["Magic"])
+        elif play_action == attack_dic[spell_attack]:
+            p1_dmg = skills["Magic"] + (0.25 * skills["Strength"])
 
     #The function here is used to determine if the health of the enemy horde.
         #The health will either increase or decrease depending on the level of the players.
