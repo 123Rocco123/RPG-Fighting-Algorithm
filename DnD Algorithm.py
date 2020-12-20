@@ -148,15 +148,12 @@ class algorithm:
 
             fight += random.randint(1,10)
             if fight >= 7:
-                #Enemy choice and health of the enemy horde.
-                rand_bigbad = random.ranint(1,4)
-                if rand_bigbad == 1:
-                    horde = danger * enemy_grunt 
-                elif rand_bigbad == 2:
-                    horde = (danger / 2) * enemy_heath_boss
-                elif rand_bigbad == 3:
-                    horde = (danger * enemy_grunt) + (danger/2 * enemy_health_boss)
+                #These functions will be called to initialize the functions, and set the algorithm in motion.
+                self.horde_health()
+                self.resistance()
 
+                player_action = input("What do you want to do? ")
+                self.player_dmg()
                 #Damage from the players to the horde.
                 if bonus_dmg * level >= horde:
                     print("You've successfully killed off the entire horde!")
@@ -186,3 +183,12 @@ class algorithm:
                 time.sleep(300)
                 fight = 0
                 algorithm()
+
+#This function is used to initalize the character creation, and set the circumstances for a battle and the algorithm to start in motion. 
+def game_start():
+    character_creation()
+    player_type()
+
+    fighting()
+
+game_start()
