@@ -2,7 +2,9 @@ import random
 import time
 
 #The dictionary below is used to determine the words that the player would use to see if they want to attack of hit something. 
-attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"]}
+attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"], flight : ["run away", "escape", "leave", "get lost", "bounce", "retreat"], surrender: ["give up", "accept fate", "surrender", "quit", "lay down", "roll over"]}
+
+#This varaible is used to determine if the game is at an end or not. 
 end = False
 
 instructions = "Below you have 5 catagories which are used to give your character different attributes so that you'll be able to have a greater chance of success when an action that you want to do relies on that speciifc ability."
@@ -67,8 +69,8 @@ def fighting():
     while end == False:
         time.sleep(300)
         #To add randomness to the game, depending on what value "rand" is equal to, then the algorithm will be initialized, and a battle sequence will occur.
-        rand = random.randint(1,5)
-        if rand >= 4:
+        rand = random.randint(1,10)
+        if rand >= 7:
             battle = True
             begin = algorithm(character_type, 1, skills["stamina"], skills["speed"], skills["intelligence"])
             begin.algorithm_fun()
@@ -136,49 +138,55 @@ class algorithm:
         if hh > 0:
             player_health -= attack
         elif hh == (0.25 * init_hh):
-            palyer_health -= attack + (attack * 0.25)
-        elif hh < 0:
-            print("You defeated the horde")
+            player_health -= attack + (attack * 0.25)
 
+    #This function is the actual algorithm that will determine the outcome of the fight, as well as when it will occur. 
     def algorithm_fun(self):
-        time.sleep(600)
-        while end != True:
-            random.randint(1, 10)
-            fight = 0
-
-            fight += random.randint(1,10)
-            if fight >= 7:
+        while end != False:
+            if battle == True:
                 #These functions will be called to initialize the functions, and set the algorithm in motion.
                 self.horde_health()
                 self.resistance()
 
-                player_action = input("What do you want to do? ")
-                self.player_dmg()
-                #Damage from the players to the horde.
-                if bonus_dmg * level >= horde:
-                    print("You've successfully killed off the entire horde!")
-                    EnemyHealth = EnemyHealth - (bonus_dmg + possibility)
-                    if EnemyHealth < horde:
-                        kills = horde % (level*bonus_dmg)
-                        horde -= level*bonus_dmg
-                        print("You've killed", kills, "enemies.")
-                        enemy_move()
-                else:
-                    print("You we're unable to pull of the move.")
+                #The while loop is here to constantly repeat as the hordes are alive. 
+                while hh > 0:
+                    #The health varaible here refers to the health of the player.
+                    if health <= 0:
+                        print("You died")
+                        exit()
+                    elif health > 0:
+                        print("Your current health is", health, "\n")
+                        player_action = input("What do you want to do? ")
+                        
+                        if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
+                            #Damage from the players to the horde
+                            self.player_dmg()
+                            hh -= p1_dmg
+                            self.enemy_move()
+                        elif player_action == attack_dic[flight]:
+                            escape_prob = (random.randint(1,10) * self.speed) - hordes
+                            if escape_prob >= 65:
+                                print("You've succesfully run away from the horde")
+                                hh = 0
+                                horde += 1
+                            else:
+                                print("You've failed to escaep from the horde\n")
 
-                if battle == True:
-                    move = input("What move are you gonna do?")
-
-                    move_words = move.split()
-
-                    for x in move_words:
-                        for y in keywords:
-                            if x == y:
-                                possibility = random.randint(1,20)
-                                damage(PLACEHOLDER)
+                                player_action = input("What do you want to do? ")
+                        
+                                if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
+                                    #Damage from the players to the horde
+                                    self.player_dmg()
+                                    hh -= p1_dmg
+                                    self.enemy_move()
+                                elif player_action == attack_dic[surrender]:
+                                    print("You've accepted your fate")
+                                    
+                                    time.sleep(2)
+                                    exit()
                 time.sleep(450)
                 fight = 0
-                algorithm()
+                battle = False
             else:
                 time.sleep(300)
                 fight = 0
