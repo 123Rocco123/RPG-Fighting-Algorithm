@@ -50,11 +50,12 @@ def loop():
 def player_type():
     global character_type
 
-    if skills["Strength"] > skils["Magic"]:
+    #Player's character's archetype will be determined by seeing if one category is overwhelmingly higher compared to another. 
+    if skills["Strength"] >= skils["Magic"] + 10:
         character_type = "melee"
-    elif skills["Strength"] < skills["Magic"]:
+    elif skills["Magic"] >= skills["Strength"] + 10:
         character_type = "wizard"
-    elif skills["Strength"] == skills["Magic"]:
+    else:
         character_type = "hybrid"
 
 #This function is used to outline when a fight is to occur.
@@ -70,7 +71,7 @@ def fighting():
         if rand >= 4:
             battle = True
             begin = algorithm(character_type, 1, skills["stamina"], skills["speed"], skills["intelligence"])
-            begin.algorithm()
+            begin.algorithm_fun()
         else:
             fighting()
 
@@ -80,7 +81,9 @@ class algorithm:
     horde_resistance = {magic_res : 0, melee_res : 0}
     health = 500 + (100*level)
 
-    player_turn = 1
+    #This will determine the number of hordes that the player will be up against.
+        #As the horde number increases, so will their strength, keeping the challenge resonable and not allowing the player to breeze through the game. 
+    hordes = 1
 
     def __init__(self, type1, level, stamina, speed, intelligence):
         self.type1 = type1
@@ -90,21 +93,17 @@ class algorithm:
         self.intelligence = intelligence
 
     def resistance(self):
-        #This function contains the code that will be randomly assigned to the hordes when the players have to fight them.
-        rand_horde_num = random.randint(1,10)
-        resist = 1
-
         #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
                 #The resistance will increase with the level of the player so that they won't be able to instantly defeat the horde.
         if self.type1 == "magic":
-            magic_dmg = resist * self.level
+            magic_dmg = (2 * self.level) * hordes
             horde_resistance[magic_res] = magic_dmg
         elif self.type1 == "melee":
-            melee_dmg = 10 * self.level
+            melee_dmg = (2 * self.level) * hordes
             horde_resistance[melee_res] = melee_dmg
         elif self.type1 == "hybrid":
-            melee_dmg = resist * self.level
-            magic_dmg = resist * self.level
+            melee_dmg = (2 * self.level) * hordes
+            magic_dmg = (2 * self.level) * hordes
             
             horde_resistance[melee_res] = melee_dmg
             horde_resistance[magic_res] = magic_dmg
@@ -112,9 +111,9 @@ class algorithm:
     #This function is used to determine the damage that the player will inflict on the enemy hordes. 
     def player_dmg(self):
         if player_action == attack_dic[melee_attacks]: 
-            p1_dmg = skills["Strength"] + (0.25 * skills["Magic"])
+            p1_dmg = (skills["Strength"] - horde_resistance[melee_res]) + (0.25 * skills["Magic"])
         elif play_action == attack_dic[spell_attack]:
-            p1_dmg = skills["Magic"] + (0.25 * skills["Strength"])
+            p1_dmg = (skills["Magic"] - horde_resistance[magic_res]) + (0.25 * skills["Strength"])
 
     #The function here is used to determine if the health of the enemy horde.
         #The health will either increase or decrease depending on the level of the players.
@@ -141,7 +140,7 @@ class algorithm:
         elif hh < 0:
             print("You defeated the horde")
 
-    def algorithm(self):
+    def algorithm_fun(self):
         time.sleep(600)
         while end != True:
             random.randint(1, 10)
