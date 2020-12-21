@@ -5,7 +5,9 @@ import time
 attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], 
               spell_attacks : ["spell", "cast", "bewitch"], 
               flight : ["run away", "escape", "leave", "get lost", "bounce", "retreat"], 
-              surrender: ["give up", "accept fate", "surrender", "quit", "lay down", "roll over"]}
+              surrender : ["give up", "accept fate", "surrender", "quit", "lay down", "roll over"],
+              intelligence : ["out think", "smarten out", "outwit",  "wits", "intelligence", "IQ"]
+              }
 
 #This varaible is used to determine if the game is at an end or not. 
 end = False
@@ -162,7 +164,7 @@ class algorithm:
                         print("You died")
                         exit()
                     elif health > 0:
-                        print("Your current health is", health, "\n")
+                        print("Your current health is", health, "and the hordes is", hh, "\n")
                         player_action = input("What do you want to do? ")
                         
                         if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
@@ -183,42 +185,125 @@ class algorithm:
                                     easy_mode -= 5
                             else:
                                 print("You've failed to escape from the horde\n")
+                                
+                                while hh > 0:
+                                    print("Your current health is:", health)
 
-                                player_action = input("What do you want to do? ")
-                        
-                                if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
-                                    #Damage from the players to the horde
-                                    self.player_dmg()
-                                    hh -= p1_dmg
-                                    self.enemy_move()
-                                elif player_action == attack_dic[surrender]:
-                                    print("You've accepted your fate")
+                                    player_action = input("What do you want to do? ")
                                     
-                                    time.sleep(2)
-                                    exit()
+                                    #This if statement is used to see what the palyer wants to do after they had failed their "flight". 
+                                    if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
+                                        #Damage from the players to the horde
+                                        self.player_dmg()
+                                        hh -= p1_dmg
+                                        self.enemy_move()
+                                    #This if statement is used to determine if the player wants to use their wits to talk their way out of defeating this horde, and whats to happen if they fail.
+                                        #The difference with the previous if statemetnts of this genre is that instead of being given another opportunity, its either they outwit the horde, or they end up dying. 
+                                    if player-action == attack_dic[intelligence]:
+                                        intelligent_escape = random.randint(1,5) * self.intelligence
+
+                                        if intelligent_escape >= 60:
+                                            print("You've managed to outwit the horde, even though you failed to outrun them.")
+
+                                            horde += 1
+                                            hh = 0
+                                        else:
+                                            print("You're not smart enough to outwit the horde, and sick of your games, they rip you apart... Sorry.")
+
+                                            hh = 0
+                                            time.sleep(10)
+                                            exit()
+                                    elif player_action == attack_dic[surrender]:
+                                        print("You've accepted your fate")
+                                    
+                                        time.sleep(2)
+                                        exit()
+                                horde += 1
+                        #The difference between this "flight" option and the one before is that if the player instead heavily invests in stamina rather than speed, then they'll have the option of outrunning the horde, but much more difficultly.
                         elif player_action == actack_dic[flight] and skills["speed"] < 30 and skils["stamina"] > 50:
                             escape_prob_stamina = (random.randint(1,5) * self.speed)
                             if escape_prob-stamina >= 65 - easy_mode_stamina:
                                 print("You've succesfully managed to escape the hordes.")
 
                                 hh = 0
+                                horde += 1
                                 easy_mode_stamina -= 5
                             #This else statement is used to determine what the player is able to do when they're eventually caught up by the horde if they're not lucky enough to get meet the escape probability. 
                             else:
                                 print("You were caught by the horde.\n")
 
-                                player_action = input("What do you want to do? ")
-                        
-                                if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
-                                    #Damage from the players to the horde
-                                    self.player_dmg()
-                                    hh -= p1_dmg
-                                    self.enemy_move()
-                                elif player_action == attack_dic[surrender]:
-                                    print("You've accepted your fate")
+                                while hh > 0:
+                                    print("Your current health is:", health)
+
+                                    player_action = input("What do you want to do? ")
+                                
+                                    if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
+                                        #Damage from the players to the horde
+                                        self.player_dmg()
+                                        hh -= p1_dmg
+                                        self.enemy_move()
+                                    elif player-action == attack_dic[intelligence]:
+                                        intelligent_escape = random.randint(1,5) * self.intelligence
+
+                                        if intelligent_escape >= 60:
+                                            print("You've managed to outwit the horde, even though you failed to outrun them.")
+
+                                            horde += 1
+                                            hh = 0
+                                        else:
+                                            print("You're not smart enough to outwit the horde, nor are you fast enough, so they kill you. Better luck next time.")
+
+                                            hh = 0
+                                            time.sleep(10)
+                                            exit()
+                                    elif player_action == attack_dic[surrender]:
+                                        print("You've accepted your fate")
                                     
-                                    time.sleep(2)
-                                    exit()
+                                        hh = 0
+                                        time.sleep(2)
+                                        exit()
+                        #This else if statement is used to determine if the player wants to use their wits to beat the horde rather than just running away or fighting them. 
+                        elif player_action == attack_dic[intelligence]:
+                            intelligence_prob = random.randint(1,5) * self.intelligence
+
+                            #The difference with this option, is the method in which the difficulty of managing to beat it increases with the player's level.
+                                #This is to make sure that they won't be able to steamroll past these options, and defeat each horde without breaking a sweat. 
+                            if intelligence_prob >= 50 and self.level <= 10:
+                                print("You've managed to outwit the enenmy horde")
+
+                                hh = 0
+                                horde += 1
+                            elif intelligence_prob >= 50 and self.level >= 10 and self.level <= 20:
+                                print("You've managed to outwit the enenmy horde")
+
+                                hh = 0
+                                horde += 1
+                            else:
+                                print("You weren't able to talk your way out of this one, and now the horde is angry with you.\n Your only options are that of fighting horde, running away, or accepting your faith.")
+
+                                player_action = input("What do you want to do? ")
+                                
+                                #This while loop is here to make sure that if the player fails to beat the horde with intellect, then they'll have to either fight them, run, or accept their fate. 
+                                while hh > 0:
+                                    if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
+                                        #Damage from the players to the horde
+                                        self.player_dmg()
+                                        hh -= p1_dmg
+                                        self.enemy_move()
+                                    if player_action == attack_dic[flight]:
+                                        flight_escape_prob = random.randint(1,5) * self.speed
+
+                                        if flightflight_escape_prob >= 60 + (self.level *2):
+                                            print("You've managed to escape from the horde, even though you failed to outwit them.\nIt seems that sometimes its best just to run instead of using YOUR head...")
+
+                                            hh = 0
+                                            horde += 1
+                                    elif player_action == attack_dic[surrender]:
+                                        print("You've accepted your fate")
+                                        
+                                        hh = 0
+                                        time.sleep(2)
+                                        exit()
                 time.sleep(450)
                 fight = 0
                 battle = False
