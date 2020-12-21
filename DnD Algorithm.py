@@ -2,7 +2,10 @@ import random
 import time
 
 #The dictionary below is used to determine the words that the player would use to see if they want to attack of hit something. 
-attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], spell_attacks : ["spell", "cast", "bewitch"], flight : ["run away", "escape", "leave", "get lost", "bounce", "retreat"], surrender: ["give up", "accept fate", "surrender", "quit", "lay down", "roll over"]}
+attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], 
+              spell_attacks : ["spell", "cast", "bewitch"], 
+              flight : ["run away", "escape", "leave", "get lost", "bounce", "retreat"], 
+              surrender: ["give up", "accept fate", "surrender", "quit", "lay down", "roll over"]}
 
 #This varaible is used to determine if the game is at an end or not. 
 end = False
@@ -82,6 +85,10 @@ class algorithm:
         #The resistances will change depending on the outcome of the resistance varaible.
     horde_resistance = {magic_res : 0, melee_res : 0}
     health = 500 + (100*level)
+
+    #This varaible is used to decrease the required points to successfully run away from hordes.
+    easy_mode = 20
+    easy_mode_stamina = 10
 
     #This will determine the number of hordes that the player will be up against.
         #As the horde number increases, so will their strength, keeping the challenge resonable and not allowing the player to breeze through the game. 
@@ -163,14 +170,42 @@ class algorithm:
                             self.player_dmg()
                             hh -= p1_dmg
                             self.enemy_move()
+                        #This conditional statement is used to determine what is to occur when a player wants to do an action that relates to running away. 
                         elif player_action == attack_dic[flight]:
-                            escape_prob = (random.randint(1,10) * self.speed) - hordes
-                            if escape_prob >= 65:
+                            escape_prob = (random.randint(1,5) * self.speed) - hordes
+                            if escape_prob >= (65 - easy_mode):
                                 print("You've succesfully run away from the horde")
                                 hh = 0
                                 horde += 1
+
+                                #As the player succesfully manages to escape from the hordes, the bonus will diminish as it will become harder for them to run away from the hordes succesfully. 
+                                if easy_mode > 0:
+                                    easy_mode -= 5
                             else:
-                                print("You've failed to escaep from the horde\n")
+                                print("You've failed to escape from the horde\n")
+
+                                player_action = input("What do you want to do? ")
+                        
+                                if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
+                                    #Damage from the players to the horde
+                                    self.player_dmg()
+                                    hh -= p1_dmg
+                                    self.enemy_move()
+                                elif player_action == attack_dic[surrender]:
+                                    print("You've accepted your fate")
+                                    
+                                    time.sleep(2)
+                                    exit()
+                        elif player_action == actack_dic[flight] and skills["speed"] < 30 and skils["stamina"] > 50:
+                            escape_prob_stamina = (random.randint(1,5) * self.speed)
+                            if escape_prob-stamina >= 65 - easy_mode_stamina:
+                                print("You've succesfully managed to escape the hordes.")
+
+                                hh = 0
+                                easy_mode_stamina -= 5
+                            #This else statement is used to determine what the player is able to do when they're eventually caught up by the horde if they're not lucky enough to get meet the escape probability. 
+                            else:
+                                print("You were caught by the horde.\n")
 
                                 player_action = input("What do you want to do? ")
                         
