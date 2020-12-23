@@ -88,6 +88,12 @@ class algorithm:
     horde_resistance = {magic_res : 0, melee_res : 0}
     health = 500 + (100*level)
 
+    #The following varaibles are used to the determine what was the person's first choice. 
+        #Depending on what they chose, the next time, they won't be allowed to choose that option. 
+    stamina_first = False
+    intelligent_first = False
+    fighting_first = False
+
     #This varaible is used to decrease the required points to successfully run away from hordes.
     easy_mode_stamina = 10
 
@@ -176,37 +182,6 @@ class algorithm:
                 time.sleep(2)
                 exit()
 
-    #This function is used to determine what is to occur if the player is to choose the intelligence option as their first line of action. 
-    def intelligence_first(self):
-        intelligent_escape = random.randint(1,5) * self.intelligence
-
-        #Depending on the player's level, the probabilities required to escape the horde will change. This is to make sure that the player will not just have to invest to a certain level, and then be able to beat all of the hordes. 
-        if intelligent_escape >= 15 and self.level < 5:
-            print("You've managed to outwit the horde, even though you failed to outrun them.")
-
-            horde += 1
-            hh = 0
-
-        elif intelligent_escape >= 20 and self.level < 10 and self.level >= 5:
-            print("You've managed to outwit the horde, even though you failed to outrun them.")
-
-            horde += 1
-            hh = 0
-
-        elif intelligent_escape >= 40 and self.level >= 10 and self.level <= 15:
-            print("You've managed to outwit the horde, even though you failed to outrun them.")
-
-            horde += 1
-            hh = 0
-        
-        elif intelligent_escape >= 70 and self.level > 15:
-            print("You've managed to outwit the horde, even though you failed to outrun them.")
-
-            horde += 1
-            hh = 0
-        else:
-            self.failed_genius()
-
     #This function is used for when a player wants to do an action that uses their character's wits to get out of a situation. 
     def intelligence_func(self):
         intelligent_escape = random.randint(1,5) * self.intelligence
@@ -237,11 +212,14 @@ class algorithm:
             hh = 0
 
         else:
-            print("You're not smart enough to outwit the horde, and sick of your games, they rip you apart... Sorry.")
+            if intelligent_first == True:
+                self.failed_genius()
+            else:
+                print("You're not smart enough to outwit the horde, and sick of your games, they rip you apart... Sorry.")
 
-            hh = 0
-            time.sleep(10)
-            exit()
+                hh = 0
+                time.sleep(10)
+                exit()
 
     #This function is to execute a different scenerio if the player is to fail escaping from enemy horde. 
     def failed_runner(self):    
@@ -347,7 +325,9 @@ class algorithm:
                 while hh > 0:
                     #The health varaible here refers to the health of the player.
                     if health <= 0:
-                        print("You died")
+                        print("You died, better luck next time.")
+
+                        hh = 0
                         exit()
                     elif health > 0:
                         print("Your current health is", health, "and the hordes is", hh, "\n")
@@ -364,7 +344,8 @@ class algorithm:
 
                         #This else if statement is used to determine if the player wants to use their wits to beat the horde rather than just running away or fighting them. 
                         elif player_action == attack_dic[intelligence]:
-                            self.intelligence_first()
+                            intelligent_first = True
+                            self.intelligence_func()
 
                 time.sleep(450)
                 fight = 0
