@@ -9,8 +9,9 @@ Currently, the repository contains code on how to creating your character, stori
 1) Make sure that there aren't errors in the code.
 2) Add more comments, to help with the understanding of the code.
 3) Add new features to the algorithm.
-4) Function simplification
-   - This means making the two "intelligence" functions slot into one another. 
+   - Creating a leveling up system.
+4) Allowing the player to be able to use all of his / her skills before being killed by the horde.
+   - Meaning, that rather than being based on a 2 strikes system it will be more like an RPG game. 
 
 ## Goals Completed:
 1) Finalize the "structure" surrounding the algorithm.
@@ -20,3 +21,4 @@ Currently, the repository contains code on how to creating your character, stori
    - This means finalizing the algorithm by utilizing all of the functions created. 
 4) Code simplification
    - Meaning that the code shouldn't have much or any repetions. For any current repetitions of the code, they're to be inserted into functions so as to make it more modular and easier to deal with. 
+   - This means making the two "intelligence" functions slot into one another. 
