@@ -2,11 +2,11 @@ import random
 import time
 
 #The dictionary below is used to determine the words that the player would use to see if they want to attack of hit something. 
-attack_dic = {melee_attacks : ["hit", "attack", "melee", "rage", "slash", "thrust"], 
-              spell_attacks : ["spell", "cast", "bewitch"], 
-              flight : ["run away", "escape", "leave", "get lost", "bounce", "retreat"], 
-              surrender : ["give up", "accept fate", "surrender", "quit", "lay down", "roll over"],
-              intelligence : ["out think", "smarten out", "outwit",  "wits", "intelligence", "IQ"]
+attack_dic = {"melee_attacks" : ["hit", "attack", "melee", "rage", "slash", "thrust"], 
+              "spell_attacks" : ["spell", "cast", "bewitch"], 
+              "flight" : ["run away", "escape", "leave", "get lost", "bounce", "retreat"], 
+              "surrender" : ["give up", "accept fate", "surrender", "quit", "lay down", "roll over"],
+              "intelligence" : ["out think", "smarten out", "outwit",  "wits", "intelligence", "IQ"]
               }
 
 #This varaible is used to determine if the game is at an end or not. 
@@ -126,9 +126,9 @@ class algorithm:
 
     #This function is used to determine the damage that the player will inflict on the enemy hordes. 
     def player_dmg(self):
-        if player_action == attack_dic[melee_attacks]: 
+        if player_action == attack_dic["melee_attacks"]: 
             p1_dmg = (skills["Strength"] - horde_resistance[melee_res]) + (0.25 * skills["Magic"])
-        elif play_action == attack_dic[spell_attack]:
+        elif play_action == attack_dic["spell_attack"]:
             p1_dmg = (skills["Magic"] - horde_resistance[magic_res]) + (0.25 * skills["Strength"])
 
     #The function here is used to determine if the health of the enemy horde.
@@ -162,12 +162,12 @@ class algorithm:
                                 
         #This while loop is here to make sure that if the player fails to beat the horde with intellect, then they'll have to either fight them, run, or accept their fate. 
         while hh > 0:
-            if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
+            if player_action == attack_dic["melee_attacks"] or attack_dic["spell_attacks"]:
                 #Damage from the players to the horde
                 self.player_dmg()
                 hh -= p1_dmg
                 self.enemy_move()
-            if player_action == attack_dic[flight]:
+            if player_action == attack_dic["flight"]:
                 flight_escape_prob = random.randint(1,5) * self.speed
 
                 if flightflight_escape_prob >= 60 + (self.level *2):
@@ -175,7 +175,7 @@ class algorithm:
 
                     hh = 0
                     horde += 1
-            elif player_action == attack_dic[surrender]:
+            elif player_action == attack_dic["surrender"]:
                 print("You've accepted your fate")
                                         
                 hh = 0
@@ -240,11 +240,11 @@ class algorithm:
             #This if statement is used to determine if the player wants to use their wits to talk their way out of defeating this horde, and whats to happen if they fail.
                 #The difference with the previous if statemetnts of this genre is that instead of being given another opportunity, its either they outwit the horde, or they end up dying. 
             
-            if player-action == attack_dic[intelligence]:
+            if player-action == attack_dic["intelligence"]:
                 #This will call the intelligence function that will execute the probabilities of success depending on the player's statistics. 
                 self.intelligence_func()
             
-            elif player_action == attack_dic[surrender]:
+            elif player_action == attack_dic["surrender"]:
                 print("You've accepted your fate")
                                     
                 time.sleep(2)
@@ -323,6 +323,11 @@ class algorithm:
 
                 #The while loop is here to constantly repeat as the hordes are alive. 
                 while hh > 0:
+                    #These variable are used to determine if the move that the player wrote is valid or not. 
+                    valid_attack = False
+                    valid_run = False
+                    valid_think = False
+
                     #The health varaible here refers to the health of the player.
                     if health <= 0:
                         print("You died, better luck next time.")
@@ -332,19 +337,27 @@ class algorithm:
                     elif health > 0:
                         print("Your current health is", health, "and the hordes is", hh, "\n")
                         player_action = input("What do you want to do? ")
+
+                        move = player_action.split()
+                        for x in move:
+                            if x == attack_dic["melee_attacks"] or x == attack_dic["spell_attacks"]:
+                                #Damage from the players to the horde
+                                valid_attack = True
+                            #This conditional statement is used to determine what is to occur when a player wants to do an action that relates to running away. 
+                            elif x == attack_dic["flight"]:
+                                valid_run = True
+                            #This else if statement is used to determine if the player wants to use their wits to beat the horde rather than just running away or fighting them. 
+                            elif x == attack_dic["intelligence"]:
+                                intelligent_first = True
+                                valid_think = True
                         
-                        if player_action == attack_dic[melee_attacks] or attack_dic[spell_attacks]:
-                            #Damage from the players to the horde
+                        if valid_attack == True:
                             self.player_dmg()
                             hh -= p1_dmg
                             self.enemy_move()
-                        #This conditional statement is used to determine what is to occur when a player wants to do an action that relates to running away. 
-                        elif player_action == attack_dic[flight]:
+                        elif valid_run == True:
                             self.runner()
-
-                        #This else if statement is used to determine if the player wants to use their wits to beat the horde rather than just running away or fighting them. 
-                        elif player_action == attack_dic[intelligence]:
-                            intelligent_first = True
+                        elif valid_think == True:
                             self.intelligence_func()
 
                 time.sleep(450)
