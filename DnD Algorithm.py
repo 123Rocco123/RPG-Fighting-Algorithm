@@ -143,6 +143,33 @@ class algorithm:
         elif self.level == 30:
             hh = 300 * self.level
             init_hh = hh
+    
+    #This function is used to determine how many experience points the player is to gain from eahc horde. 
+        #The parameter "xp" will change depending on the player's level and the number of hordes that preceeded this one. 
+    def level_up(self, xp):
+        #The experience counter will generate a certain amount of experience that will increase with the amount of hordes that attack the player. 
+        experience_container = xp * (horde / 2)
+        
+        #The if statement is used to determine when the player has leveled up.
+        if experience_container >= 100 * self.level:
+            print("You've leveled up.")
+            points_to_invest = 5
+
+            level += 1
+            experience_container -= 100 * self.level
+
+            #This while loop is used to add points to the player's statistics, improving them.
+            while points_to_invest > 0:
+                point_investment = input("What do you want to invest your 5 points into? ").capitalize()
+                for x in skills:
+                    if point_investment == x:
+                        num = int(input("How many points do you want to invest into this category?"))
+                        skills[x] += num
+                        points_to_invest -= num
+            
+        elif self.level == 20:
+            experience_container = 0
+        
 
     #This function is used to determine how much health the player will lose depenig on the health of the enemy horde. 
         #When the horde will have 25% of their health, then they will enter a "bonus damage" of sorts, where they'll deal an extra 25% damage to the player.
