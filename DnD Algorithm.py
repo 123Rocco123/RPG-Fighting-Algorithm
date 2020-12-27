@@ -28,11 +28,11 @@ def difficulty():
 
     #The following if statements are uesd to determine what the multiplier is depending on the difficulty that the player chose. 
     if difficult == "easy":
-        multiplier = 0.5
+        multiplier = 1.5
     elif difficult == "normal":
         multiplier = 1
     elif difficult == "hard":
-        multiplier = 1.5
+        multiplier = 0.5
 
 instructions = "Below you have 5 catagories which are used to give your character different attributes so that you'll be able to have a greater chance of success when an action that you want to do relies on that speciifc ability."
     
@@ -133,16 +133,18 @@ class algorithm:
 
     def resistance(self):
         #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
-                #The resistance will increase with the level of the player so that they won't be able to instantly defeat the horde.
+                #The resistance will increase with the level of the player so that they won't be able to instantly defeat the horde. 
         if self.type1 == "magic":
-            magic_dmg = (2 * self.level) * hordes
+            magic_dmg = ((2 * self.level) * hordes) / multiplier
+            #The multiplier variable here is used to divide the resistance of the hordes, causing them to become stronger or weaker depending on what difficulty the player chose. 
+                #With a decreased difficulty, the denominator will increase so as to make sure that the player can almost always hit the horde and kill them in one shot. 
             horde_resistance[magic_res] = magic_dmg
         elif self.type1 == "melee":
-            melee_dmg = (2 * self.level) * hordes
+            melee_dmg = ((2 * self.level) * hordes) / multiplier
             horde_resistance[melee_res] = melee_dmg
         elif self.type1 == "hybrid":
-            melee_dmg = (2 * self.level) * hordes
-            magic_dmg = (2 * self.level) * hordes
+            melee_dmg = ((2 * self.level) * hordes) / multiplier
+            magic_dmg = ((2 * self.level) * hordes) / multiplier
             
             horde_resistance[melee_res] = melee_dmg
             horde_resistance[magic_res] = magic_dmg
