@@ -12,6 +12,28 @@ attack_dic = {"melee_attacks" : ["hit", "attack", "melee", "rage", "slash", "thr
 #This varaible is used to determine if the game is at an end or not. 
 end = False
 
+#The following function is used to determine how difficult the game is to be depending on user input. 
+def difficulty():
+    difficulty_lst = ["easy", "normal", "hard"]
+    
+    print("Select the difficulty of the game.")
+    for x in difficulty_lst:
+        print(x)
+
+    #The multiplier here is used to determine how much stronger the enemies will be.
+        #To do this, the horde value will change depending on the difficulty.
+        #Furthermore, the experience gained will change with the difficulty as well. 
+    multiplier = 0
+    difficult = input("Insert difficulty here: ").lower()
+
+    #The following if statements are uesd to determine what the multiplier is depending on the difficulty that the player chose. 
+    if difficult == "easy":
+        multiplier = 0.5
+    elif difficult == "normal":
+        multiplier = 1
+    elif difficult == "hard":
+        multiplier = 1.5
+
 instructions = "Below you have 5 catagories which are used to give your character different attributes so that you'll be able to have a greater chance of success when an action that you want to do relies on that speciifc ability."
     
 #The following dictionary contains the attributes that the player can have.
@@ -77,7 +99,7 @@ def fighting():
         rand = random.randint(1,10)
         if rand >= 7:
             battle = True
-            begin = algorithm(character_type, 1, skills["stamina"], skills["speed"], skills["intelligence"])
+            begin = algorithm(character_type, 1, skills["stamina"], skills["speed"], skills["intelligence"], )
             begin.algorithm_fun()
         else:
             fighting()
@@ -101,12 +123,13 @@ class algorithm:
         #As the horde number increases, so will their strength, keeping the challenge resonable and not allowing the player to breeze through the game. 
     hordes = 1
 
-    def __init__(self, type1, level, stamina, speed, intelligence):
+    def __init__(self, type1, level, stamina, speed, intelligence, difficulty):
         self.type1 = type1
         self.level = level
         self.stamina = stamina
         self.speed = speed
         self.intelligence = intelligence
+        self.difficulty = difficulty
 
     def resistance(self):
         #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
@@ -148,7 +171,7 @@ class algorithm:
         #The parameter "xp" will change depending on the player's level and the number of hordes that preceeded this one. 
     def level_up(self, xp):
         #The experience counter will generate a certain amount of experience that will increase with the amount of hordes that attack the player. 
-        experience_container = xp * (horde / 2)
+        experience_container = xp * (hordes / 2)
         
         #The if statement is used to determine when the player has leveled up.
         if experience_container >= 100 * self.level:
@@ -201,7 +224,7 @@ class algorithm:
                     print("You've managed to escape from the horde, even though you failed to outwit them.\nIt seems that sometimes its best just to run instead of using YOUR head...")
 
                     hh = 0
-                    horde += 1
+                    hordes += 1
             elif player_action == attack_dic["surrender"]:
                 print("You've accepted your fate")
                                         
@@ -217,25 +240,25 @@ class algorithm:
         if intelligent_escape >= 15 and self.level < 5:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
-            horde += 1
+            hordes += 1
             hh = 0
 
         elif intelligent_escape >= 20 and self.level < 10 and self.level >= 5:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
-            horde += 1
+            hordes += 1
             hh = 0
 
         elif intelligent_escape >= 40 and self.level >= 10 and self.level <= 15:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
-            horde += 1
+            hordes += 1
             hh = 0
         
         elif intelligent_escape >= 70 and self.level > 15:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
-            horde += 1
+            hordes += 1
             hh = 0
 
         else:
@@ -276,7 +299,7 @@ class algorithm:
                                     
                 time.sleep(2)
                 exit()
-        horde += 1
+        hordes += 1
             
     #This function is used to determine what is to occur if the player wants to run away from the enemy horde. 
     def runner(self):
@@ -287,25 +310,25 @@ class algorithm:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
 
             elif escape_prob_stamina >= 30 and self.player < 10 and self.player >= 5:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
 
             elif escape_prob_stamina >= 50 and self.player >= 10 and self.player <= 15:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
 
             elif escape_prob_stamina >= 75 and self.player > 20:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
 
             #This else statement is used to determine what the player is able to do when they're eventually caught up by the horde if they're not lucky enough to get meet the escape probability. 
             else:
@@ -318,25 +341,25 @@ class algorithm:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
 
             elif escape_prob >= 25 and self.player < 10 and self.player >= 5:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
 
             elif escape_prob >= 45 and self.player >= 10 and self.player <= 15:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
 
             elif escape_prob >= 70 and self.player > 15:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
-                horde += 1
+                hordes += 1
             else:
                 self.failed_runner()
 
@@ -386,6 +409,8 @@ class algorithm:
                             self.runner()
                         elif valid_think == True:
                             self.intelligence_func()
+                #Calling this function will result in the player gaining experience points, moving him closer to being leveled up. 
+                self.level_up()
 
                 time.sleep(450)
                 fight = 0
