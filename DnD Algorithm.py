@@ -28,11 +28,11 @@ def difficulty():
 
     #The following if statements are uesd to determine what the multiplier is depending on the difficulty that the player chose. 
     if difficult == "easy":
-        multiplier = 1.5
+        multiplier = 0.5
     elif difficult == "normal":
         multiplier = 1
     elif difficult == "hard":
-        multiplier = 0.5
+        multiplier = 1.5
 
 instructions = "Below you have 5 catagories which are used to give your character different attributes so that you'll be able to have a greater chance of success when an action that you want to do relies on that speciifc ability."
     
@@ -135,16 +135,16 @@ class algorithm:
         #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
                 #The resistance will increase with the level of the player so that they won't be able to instantly defeat the horde. 
         if self.type1 == "magic":
-            magic_dmg = ((2 * self.level) * hordes) / multiplier
+            magic_dmg = int(((2 * self.level) * hordes) * multiplier)
             #The multiplier variable here is used to divide the resistance of the hordes, causing them to become stronger or weaker depending on what difficulty the player chose. 
                 #With a decreased difficulty, the denominator will increase so as to make sure that the player can almost always hit the horde and kill them in one shot. 
             horde_resistance[magic_res] = magic_dmg
         elif self.type1 == "melee":
-            melee_dmg = ((2 * self.level) * hordes) / multiplier
+            melee_dmg = int(((2 * self.level) * hordes) * multiplier)
             horde_resistance[melee_res] = melee_dmg
         elif self.type1 == "hybrid":
-            melee_dmg = ((2 * self.level) * hordes) / multiplier
-            magic_dmg = ((2 * self.level) * hordes) / multiplier
+            melee_dmg = int(((2 * self.level) * hordes) * multiplier)
+            magic_dmg = int(((2 * self.level) * hordes) * multiplier)
             
             horde_resistance[melee_res] = melee_dmg
             horde_resistance[magic_res] = magic_dmg
@@ -222,7 +222,12 @@ class algorithm:
             if player_action == attack_dic["flight"]:
                 flight_escape_prob = random.randint(1,5) * self.speed
 
-                if flightflight_escape_prob >= 60 + (self.level *2):
+                if flight_escape_prob >= ((40 + (self.level * 2)) * multiplier) and self.level <= 10:
+                    print("You've managed to escape from the horde, even though you failed to outwit them.\nIt seems that sometimes its best just to run instead of using YOUR head...")
+
+                    hh = 0
+                    hordes += 1
+                elif flight_escape_prob >= ((60 + (self.level * 2)) * multiplier) and self.level > 10:
                     print("You've managed to escape from the horde, even though you failed to outwit them.\nIt seems that sometimes its best just to run instead of using YOUR head...")
 
                     hh = 0
@@ -239,25 +244,25 @@ class algorithm:
         intelligent_escape = random.randint(1,5) * self.intelligence
 
         #Depending on the player's level, the probabilities required to escape the horde will change. This is to make sure that the player will not just have to invest to a certain level, and then be able to beat all of the hordes. 
-        if intelligent_escape >= 15 and self.level < 5:
+        if intelligent_escape >= (15 * multiplier) and self.level < 5:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
             hordes += 1
             hh = 0
 
-        elif intelligent_escape >= 20 and self.level < 10 and self.level >= 5:
+        elif intelligent_escape >= (20  * multiplier) and self.level < 10 and self.level >= 5:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
             hordes += 1
             hh = 0
 
-        elif intelligent_escape >= 40 and self.level >= 10 and self.level <= 15:
+        elif intelligent_escape >= (40  * multiplier) and self.level >= 10 and self.level <= 15:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
             hordes += 1
             hh = 0
         
-        elif intelligent_escape >= 70 and self.level > 15:
+        elif intelligent_escape >= (70 * multiplier) and self.level > 15:
             print("You've managed to outwit the horde, even though you failed to outrun them.")
 
             hordes += 1
@@ -308,25 +313,25 @@ class algorithm:
         if skills["Stamina"] + 10 > skills["Speed"]:
             escape_prob_stamina = (random.randint(1,5) * self.speed)
             
-            if escape_prob_stamina >= 20 and self.player < 5:
+            if escape_prob_stamina >= (20 * multiplier) and self.player < 5:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
                 hordes += 1
 
-            elif escape_prob_stamina >= 30 and self.player < 10 and self.player >= 5:
+            elif escape_prob_stamina >= (30 * multiplier) and self.player < 10 and self.player >= 5:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
                 hordes += 1
 
-            elif escape_prob_stamina >= 50 and self.player >= 10 and self.player <= 15:
+            elif escape_prob_stamina >= (50 * multiplier) and self.player >= 10 and self.player <= 15:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
                 hordes += 1
 
-            elif escape_prob_stamina >= 75 and self.player > 20:
+            elif escape_prob_stamina >= (75 * multiplier) and self.player > 20:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
@@ -339,25 +344,25 @@ class algorithm:
             escape_prob = (random.randint(1,5) * self.speed)
          
             #Depending on the level of the player, a different if statement is going to be executed which allows the difficulty of the game to scale with the player.
-            if escape_prob >= 15 and self.player < 5:
+            if escape_prob >= (15 * multiplier) and self.player < 5:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
                 hordes += 1
 
-            elif escape_prob >= 25 and self.player < 10 and self.player >= 5:
+            elif escape_prob >= (25 * multiplier) and self.player < 10 and self.player >= 5:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
                 hordes += 1
 
-            elif escape_prob >= 45 and self.player >= 10 and self.player <= 15:
+            elif escape_prob >= (45 * multiplier) and self.player >= 10 and self.player <= 15:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
                 hordes += 1
 
-            elif escape_prob >= 70 and self.player > 15:
+            elif escape_prob >= (70 * multiplier) and self.player > 15:
                 print("You've succesfully run away from the horde")
             
                 hh = 0
