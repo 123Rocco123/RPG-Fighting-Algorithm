@@ -77,7 +77,7 @@ def loop():
     player_type()
 
 def player_type():
-    global character_type
+    global character_type, skills
 
     #Player's character's archetype will be determined by seeing if one category is overwhelmingly higher compared to another. 
     if skills["Strength"] >= skils["Magic"] + 10:
@@ -89,7 +89,7 @@ def player_type():
 
 #This function is used to outline when a fight is to occur.
 def fighting():
-    global character_type
+    global character_type, skills
 
     battle = False
 
@@ -131,6 +131,59 @@ class algorithm:
         self.intelligence = intelligence
         self.difficulty = difficulty
 
+    #The following two functions are used to determine what is to be written to the console when the player gets a certain weapon, and the bonus damage that the player will do to the hordes. 
+    def loot_text(self, star):
+        print("The horde dropped a " + str(star) + " star item, pick it up to see what it is.")
+        print("If you pick up this weapon, then you'll have to give up the one that you have right now.")
+
+        for x in bonus_item_dmg:
+            if bonus_item_dmg[x] != "":
+                print("\nYour current weapon does", str(bonus_item_dmg[x], "damage."))
+
+        player_action = input("")
+
+        if player_action == "pick up" or player_action == "pick up item":
+            item_kind = random.randint(1,4)
+
+            if item_kind < 4:
+                #Since the items that are going to be stored into the "bonus_item_dmg" dictionary aren't just the level of the items, but a name for the item as well, the name has to be split up, and see what the level is, and if it matches up with the level of the item that the horde dropped. 
+                for x in bonus_item_dmg["melee"]:
+                    if x == str(star):
+                        print("You already have a " + str(star) + " star weapon, therefore, you can upgrade the weapon that you already have.")
+                        weapon_upgrade_level += 2
+                print("You got a " + str(star) + " star", weapons[item_kind - 1], ".\nYou will now do 5 more melee damage.")
+            else:
+               for x in bonus_item_dmg["magic"]:
+                    if x == str(star):
+                        print("You already have a " + str(star) + " star weapon, therefore, you can upgrade the weapon that you already have.")
+                        weapon_upgrade_level += 2
+               print("You got a " + str(star) + " star", weapons[item_kind - 1], ".\nYou will now do 5 more melee damage.")
+
+    #This function is used to determine the chances of the player getting what rarity of items dropped. 
+    def loot_drop(self):
+        #The list below contains the weapons that can be dropped by the horde, and depending on what gets dropped, the damage of the player increases. 
+        weapons = ["Sword", "Claymore", "Bow", "Spell Book"]
+
+        weapon_upgrade_level = {"melee" : 0, 
+                                "magic" : 0}
+
+        rarity_multiplier = 50 + (self.level * 5)
+        good_loot = random.randint(1, 100) - rarity_multiplier
+
+        bonus_item_dmg = {"melee" : "", "magic" : ""}
+
+        #The following if statements are used to determine what is to occur if the player 
+        if good_loot >= 90:
+            loot_text(5)
+        elif good_loot >= 75 and good_loot < 90:
+            loot(4)
+        elif good_loot >= 55 and good_loot < 75:
+            loot(3)
+        elif good_loot >= 35 and good_loot < 55:
+            loot(2)
+        elif good_loot < 35:
+            loot(1)
+
     def resistance(self):
         #Depending on what type or architype the player chooses, the resistance of the mobs will change depending on that.
                 #The resistance will increase with the level of the player so that they won't be able to instantly defeat the horde. 
@@ -151,10 +204,12 @@ class algorithm:
 
     #This function is used to determine the damage that the player will inflict on the enemy hordes. 
     def player_dmg(self):
+        global skills
+
         if player_action == attack_dic["melee_attacks"]: 
-            p1_dmg = (skills["Strength"] - horde_resistance[melee_res]) + (0.25 * skills["Magic"])
+            p1_dmg = ((skills["Strength"] + weapon_upgrade_level["melee"]) - horde_resistance[melee_res]) + (0.25 * skills["Magic"])
         elif play_action == attack_dic["spell_attack"]:
-            p1_dmg = (skills["Magic"] - horde_resistance[magic_res]) + (0.25 * skills["Strength"])
+            p1_dmg = ((skills["Magic"] + weapon_upgrade_level["magic"])- horde_resistance[magic_res]) + (0.25 * skills["Strength"])
 
     #The function here is used to determine if the health of the enemy horde.
         #The health will either increase or decrease depending on the level of the players.
@@ -320,6 +375,8 @@ class algorithm:
             
     #This function is used to determine what is to occur if the player wants to run away from the enemy horde. 
     def runner(self):
+        global skills
+
         if skills["Stamina"] + 10 > skills["Speed"]:
             escape_prob_stamina = (random.randint(1,5) * self.speed)
             
@@ -428,6 +485,8 @@ class algorithm:
                             self.intelligence_func()
                 #Calling this function will result in the player gaining experience points, moving him closer to being leveled up. 
                 self.level_up()
+                #This function will create a new weapon that was dropped by the horde, which will then give the player a bonus damage. 
+                self.loot_drop()
 
                 time.sleep(450)
                 fight = 0
