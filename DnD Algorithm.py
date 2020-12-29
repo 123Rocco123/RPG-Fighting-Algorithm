@@ -169,18 +169,26 @@ class algorithm:
             hh = 300 * self.level
             init_hh = hh
     
-    #This function is used to determine how many experience points the player is to gain from eahc horde. 
+    #This function is used to determine how many experience points the player is to gain from each horde. 
         #The parameter "xp" will change depending on the player's level and the number of hordes that preceeded this one. 
-    def level_up(self, xp):
-        #The experience counter will generate a certain amount of experience that will increase with the amount of hordes that attack the player. 
-        experience_container = xp * (hordes / 2)
+    def level_up(self):
+        #To start off the game, the experience of the player is set to zero.
+        experience_container = 0
+        
+        while experience_gain == True:
+            #The experience counter will generate a certain amount of experience that will increase with the amount of hordes that attack the player. 
+            experience_container += (50 * (hordes / 2)) * multiplier
+            #To avoid creating an infinite loop, we add the break statement below to make sure that the as soon as the player gains the experience points that he earned, then the if statement will trigger. 
+            break
         
         #The if statement is used to determine when the player has leveled up.
-        if experience_container >= 100 * self.level:
+        if experience_container >= 100 * self.level and self.level < 10:
             print("You've leveled up.")
             points_to_invest = 5
 
             level += 1
+            #The experience container variable is used here to reduce the level of the player's experience by the required amount for the player to have leveled up.
+                #Meaning that if they required x amount of XP points to rank up, and they have x + y XP points, then they'll rank up, and their experience will be equal to y.
             experience_container -= 100 * self.level
 
             #This while loop is used to add points to the player's statistics, improving them.
@@ -191,10 +199,11 @@ class algorithm:
                         num = int(input("How many points do you want to invest into this category?"))
                         skills[x] += num
                         points_to_invest -= num
-            
-        elif self.level == 20:
-            experience_container = 0
         
+        #Once the playe hits the level below, they'll no longer be able to level up, as they'll have maxed out all of their abilities. 
+        elif self.level == 10:
+            while end == False:
+                experience_container = 0
 
     #This function is used to determine how much health the player will lose depenig on the health of the enemy horde. 
         #When the horde will have 25% of their health, then they will enter a "bonus damage" of sorts, where they'll deal an extra 25% damage to the player.
@@ -225,13 +234,13 @@ class algorithm:
                 if flight_escape_prob >= ((40 + (self.level * 2)) * multiplier) and self.level <= 10:
                     print("You've managed to escape from the horde, even though you failed to outwit them.\nIt seems that sometimes its best just to run instead of using YOUR head...")
 
-                    hh = 0
                     hordes += 1
+                    hh = 0
                 elif flight_escape_prob >= ((60 + (self.level * 2)) * multiplier) and self.level > 10:
                     print("You've managed to escape from the horde, even though you failed to outwit them.\nIt seems that sometimes its best just to run instead of using YOUR head...")
 
-                    hh = 0
                     hordes += 1
+                    hh = 0
             elif player_action == attack_dic["surrender"]:
                 print("You've accepted your fate")
                                         
@@ -306,6 +315,7 @@ class algorithm:
                                     
                 time.sleep(2)
                 exit()
+        
         hordes += 1
             
     #This function is used to determine what is to occur if the player wants to run away from the enemy horde. 
