@@ -11,9 +11,8 @@ Currently, the repository contains code on how to creating your character, stori
 3) Add new features to the algorithm.
 4) Allowing the player to be able to use all of his / her skills before being killed by the horde.
    - Meaning, that rather than being based on a 2 strikes system it will be more like an RPG game. 
-5) Further additions to the leveling up system.
-   - Meaning, the experience gained by the player should be variable, depending on the challenge (horde number), and their level.
-6) Implamenting the difficulty system as well as the leveling up system.
+5) Make it so that if a player chooses to pick up a new weapon, then they have to give up the one that they have right now.
+   - Make it so that lower level weapons have a skill roof, where they won't be able to be re-fined past a certain level. 
 
 ## Goals Completed:
 1) Finalize the "structure" surrounding the algorithm.
@@ -24,5 +23,10 @@ Currently, the repository contains code on how to creating your character, stori
 4) Code simplification
    - Meaning that the code shouldn't have much or any repetions. For any current repetitions of the code, they're to be inserted into functions so as to make it more modular and easier to deal with. 
    - This means making the two "intelligence" functions slot into one another. 
-5) Leveling up System. 
+5) Leveling up System.
+   - The leveling up system has been added to the algorithm as well.
 6) Creating a difficulty system
+   - Implamentation of the difficulty system has also been done.
+7) Item drop function.
+   - A function used to determine the rarity of the item thats dropped when a horde is defeated, and how that item scales with the level of the player.
+   - The item also includes a "refining" method which improves the item.
